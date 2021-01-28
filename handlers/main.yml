@@ -1,0 +1,7 @@
+---
+- name: restart prometheus_pagespeed
+  become: true
+  systemd:
+    daemon_reload: true
+    name: prometheus-pagespeed-exporter.service
+    state: restarted

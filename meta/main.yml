@@ -1,0 +1,18 @@
+galaxy_info:
+  role_name: prometheus_pagespeed_exporter
+  author: Glauber Cassiano Batista
+  description: An Ansible role for installing Prometheus Pagespeed Exporter on a Ubuntu box
+  company: JobScore
+
+  license: MIT
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+
+  min_ansible_version: 2.9
+
+  galaxy_tags:
+    - prometheus
+    - pagespeed

@@ -1,0 +1,6 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: ansible-role-pagespeed-exporter
+      prometheus_pagespeed_targets: http://example.com/

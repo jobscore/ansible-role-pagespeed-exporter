@@ -1,0 +1,48 @@
+---
+- name: Ensure prometheus dir exists
+  become: true
+  file:
+    path: /opt/prometheus
+    recurse: true
+    state: directory
+
+- name: Ensure pagespeed_exporter is downloaded
+  become: true
+  get_url:
+    url: https://github.com/jobscore/pagespeed_exporter/releases/download/{{prometheus_pagespeed_version}}/pagespeed_exporter
+    dest: /tmp/pagespeed_exporter
+    mode: 0755
+  changed_when: false
+
+- name: Ensure pagespeed_exporter is placed in the correct folder
+  become: true
+  copy:
+    remote_src: true
+    src: /tmp/pagespeed_exporter
+    dest: /opt/prometheus/pagespeed_exporter
+    mode: preserve
+
+- name: Ensure the tmp file is removed
+  become: true
+  file:
+    state: absent
+    path: /tmp/pagespeed_exporter
+  changed_when: false
+
+- name: Ensure pagespeed_exporter service is configured
+  become: true
+  template:
+    dest: /etc/systemd/system/prometheus-pagespeed-exporter.service
+    src: pagespeed_exporter-service.j2
+    mode: 0755
+  notify:
+    - restart prometheus_pagespeed
+
+- name: Ensure pagespeed_exporter service is enabled
+  become: true
+  systemd:
+    daemon_reload: true
+    enabled: true
+    name: prometheus-pagespeed-exporter.service
+  notify:
+    - restart prometheus_pagespeed
